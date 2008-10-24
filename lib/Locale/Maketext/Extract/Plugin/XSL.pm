@@ -19,8 +19,10 @@ Version 0.1
 
 =cut
 
-#use version; our $VERSION = qv('0.1');
-our $VERSION = '0.1';
+# http://module-build.sourceforge.net/META-spec-current.html
+# Does not like v0.2 versions :-/
+#use version; our $VERSION = qv('0.2');
+our $VERSION = '0.2';
 
 =head1 SYNOPSIS
 
@@ -60,7 +62,11 @@ Valid localisation function names are:
 
 =item loc
 
+=item locfrag
+
 =item l
+
+=item lfrag
 
 =back
 
@@ -105,14 +111,14 @@ sub extract {
 
     my $xc = XML::LibXML::XPathContext->new($doc);
     $xc->registerNs('xsl', 'http://www.w3.org/1999/XSL/Transform');
-    my @nodes = $xc->findnodes('//@*[contains(.,":loc(") or contains(.,":l(")]');
+    my @nodes = $xc->findnodes('//@*[contains(.,":loc(") or contains(.,":l(") or contains(.,":locfrag(") or contains(.,":lfrag(")]');
     foreach my $node (@nodes) {
         my $value = $node->value();
         while (
-                $value =~ m{\:l(?:oc)     # l or loc
-                               \(         # function param begin
-                               (.*?)      # message string plus optional param values
-                               \)         # function param end
+                $value =~ m{\:l(?:oc)?(?:frag)?  # l, lfrag, loc or locfrag
+                               \(                # function param begin
+                               (.*?)             # message string plus optional param values
+                               \)                # function param end
                               }gx
                ) {
             my @data = Text::ParseWords::quotewords('\s*,\s*', 0, $1);

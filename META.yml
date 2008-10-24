@@ -1,6 +1,6 @@
 ---
 name: Locale-Maketext-Extract-Plugin-XSL
-version: 0.1
+version: 0.2
 author:
   - 'Michael Kroell <pepl@cpan.org>'
 abstract: XSL file parser
@@ -16,7 +16,7 @@ build_requires:
 provides:
   Locale::Maketext::Extract::Plugin::XSL:
     file: lib/Locale/Maketext/Extract/Plugin/XSL.pm
-    version: 0.1
+    version: 0.2
 generated_by: Module::Build version 0.3
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html

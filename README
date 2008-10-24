@@ -28,7 +28,9 @@ VALID FORMATS
     values of the XSL document. Valid localisation function names are:
 
     loc
+    locfrag
     l
+    lfrag
     Note that only the local-name for the function will be checked for.
     Namespace prefixes will be ignored. I.e. <xsl:value-of
     select="i18n:loc('Hello World')"/> and <xsl:value-of
