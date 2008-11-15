@@ -5,7 +5,7 @@ use strict;
 
 use base qw(Locale::Maketext::Extract::Plugin::Base);
 use Carp qw(croak);
-use Text::ParseWords ();
+use Regexp::Common;
 use XML::LibXML;
 use XML::LibXML::XPathContext;
 
@@ -15,14 +15,14 @@ Locale::Maketext::Extract::Plugin::XSL - XSL file parser
 
 =head1 VERSION
 
-Version 0.1
+Version 0.3
 
 =cut
 
 # http://module-build.sourceforge.net/META-spec-current.html
-# Does not like v0.2 versions :-/
-#use version; our $VERSION = qv('0.2');
-our $VERSION = '0.2';
+# Does not like v0.3 versions :-/
+#use version; our $VERSION = qv('0.3');
+our $VERSION = '0.3';
 
 =head1 SYNOPSIS
 
@@ -113,20 +113,43 @@ sub extract {
     $xc->registerNs('xsl', 'http://www.w3.org/1999/XSL/Transform');
     my @nodes = $xc->findnodes('//@*[contains(.,":loc(") or contains(.,":l(") or contains(.,":locfrag(") or contains(.,":lfrag(")]');
     foreach my $node (@nodes) {
-        my $value = $node->value();
-        while (
-                $value =~ m{\:l(?:oc)?(?:frag)?  # l, lfrag, loc or locfrag
-                               \(                # function param begin
-                               (.*?)             # message string plus optional param values
-                               \)                # function param end
-                              }gx
-               ) {
-            my @data = Text::ParseWords::quotewords('\s*,\s*', 0, $1);
+        $self->_parse_expression( $node->value() );
+    }
+
+    return;
+}
+
+=head2 _parse_expression
+
+Extract loc functions from XPATH expressions
+
+=cut
+sub _parse_expression {
+    my ($self, $value) = @_;
+
+    while (
+            $value =~ /$RE{balanced}{-begin => ':loc|:locfrag|:l|:lfrag'}{-keep}/gx
+           ) {
+        my $str = substr($1,1,length($1)-2); # remove wrapping parens
+
+        # $Re{balanced} will match the outermost parens only, -begin does not work
+        # as (I) expected, so...
+        # If the expression includes more than one loc function, recurse
+        if (
+            $str =~ /\:l(?:oc)?(?:frag)?\(/x
+           ) {
+            $self->_parse_expression( $str );
+        }
+        else {
+            my @data;
+            while ($str =~ /$RE{quoted}{-keep}/gx ) {
+                push @data, substr($1,1,length($1)-2); # remove wrapping quotes
+            }
             $self->add_entry(shift @data,  undef, join(',', @data));
         }
     }
 
-    return;
+    return 1;
 }
 
 =head1 SEE ALSO

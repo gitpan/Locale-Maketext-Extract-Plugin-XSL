@@ -2,7 +2,7 @@ NAME
     Locale::Maketext::Extract::Plugin::XSL - XSL file parser
 
 VERSION
-    Version 0.1
+    Version 0.3
 
 SYNOPSIS
         my $ext = Locale::Maketext::Extract->new(
@@ -44,6 +44,10 @@ FUNCTIONS
   extract
 
     Extraction function. Parses XSL document and adds localisation entries
+
+  _parse_expression
+
+    Extract loc functions from XPATH expressions
 
 SEE ALSO
     xgettext.pl

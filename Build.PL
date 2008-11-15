@@ -13,7 +13,7 @@ my $builder = Module::Build->new(
     requires => {
         'Locale::Maketext::Lexicon' => 0.70,
         'XML::LibXML' => 1.61,
-        'Text::ParseWords' => 0,
+        'Regexp::Common' => 0,
     },
     add_to_cleanup      => [ 'Locale-Maketext-Extract-Plugin-XSL-*' ],
     create_makefile_pl  => 'traditional',

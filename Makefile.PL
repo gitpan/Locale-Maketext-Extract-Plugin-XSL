@@ -6,8 +6,8 @@ WriteMakefile
           'VERSION_FROM' => 'lib/Locale/Maketext/Extract/Plugin/XSL.pm',
           'PREREQ_PM' => {
                            'Locale::Maketext::Lexicon' => '0.7',
+                           'Regexp::Common' => '0',
                            'Test::More' => '0',
-                           'Text::ParseWords' => '0',
                            'XML::LibXML' => '1.61'
                          },
           'INSTALLDIRS' => 'site',
