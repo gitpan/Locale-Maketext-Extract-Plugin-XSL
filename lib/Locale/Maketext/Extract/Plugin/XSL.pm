@@ -15,14 +15,11 @@ Locale::Maketext::Extract::Plugin::XSL - XSL file parser
 
 =head1 VERSION
 
-Version 0.3
+Version 0.4
 
 =cut
 
-# http://module-build.sourceforge.net/META-spec-current.html
-# Does not like v0.3 versions :-/
-#use version; our $VERSION = qv('0.3');
-our $VERSION = '0.3';
+our $VERSION = '0.4';
 
 =head1 SYNOPSIS
 
@@ -95,11 +92,7 @@ sub extract {
     my ($self,$filecontent) = @_;
 
     my $parser = XML::LibXML->new();
-    # Make sure no other input callbacks interfere in a mod_perl environment
-    my $icb = XML::LibXML::InputCallback->new();
-    $icb->cleanup_callbacks();
-    # Do not (try) to load external DTDs
-    $parser->load_ext_dtd(undef);
+    $parser->load_ext_dtd(0);
 
     my $doc;
     eval {
@@ -230,7 +223,7 @@ L<http://search.cpan.org/dist/Locale-Maketext-Extract-Plugin-XSL>
 
 =head1 COPYRIGHT
 
-Copyright 2008 Michael Kroell, all rights reserved.
+Copyright 2008-2011 Michael Kroell, all rights reserved.
 
 =head1 LICENSE
 
